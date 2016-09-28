@@ -19,7 +19,7 @@
             "database"
         ],
         "psr-4": {
-            "codedelivery\\": "app/"
+            "CodeDelivery\\": "app/"
         }
     },
     "autoload-dev": {

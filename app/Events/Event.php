@@ -1,6 +1,6 @@
 <?php
 
-namespace codedelivery\Events;
+namespace CodeDelivery\Events;
 
 abstract class Event
 {

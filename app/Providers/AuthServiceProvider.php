@@ -1,6 +1,6 @@
 <?php
 
-namespace codedelivery\Providers;
+namespace CodeDelivery\Providers;
 
 use Illuminate\Contracts\Auth\Access\Gate as GateContract;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
@@ -13,7 +13,7 @@ class AuthServiceProvider extends ServiceProvider
      * @var array
      */
     protected $policies = [
-        'codedelivery\Model' => 'codedelivery\Policies\ModelPolicy',
+        'CodeDelivery\Model' => 'CodeDelivery\Policies\ModelPolicy',
     ];
 
     /**

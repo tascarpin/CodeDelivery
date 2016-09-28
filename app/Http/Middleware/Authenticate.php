@@ -1,6 +1,6 @@
 <?php
 
-namespace codedelivery\Http\Middleware;
+namespace CodeDelivery\Http\Middleware;
 
 use Closure;
 use Illuminate\Contracts\Auth\Guard;
