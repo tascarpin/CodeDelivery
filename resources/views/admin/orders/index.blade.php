@@ -10,7 +10,11 @@
             <thead>
             <tr>
                 <td>ID</td>
-                <td>Pedido</td>
+                <td>Total</td>
+                <td>Data</td>
+                <td>Itens</td>
+                <td>Entregador</td>
+                <td>Status</td>
                 <td>Ação</td>
             </tr>
             </thead>
@@ -18,9 +22,23 @@
                 @foreach($orders as $order)
                 <tr>
                     <th>{{ $order->id }}</th>
-                    <th>{{ $order->user->name }}</th>
+                    <th>{{ $order->total }}</th>
+                    <th>{{ $order->created_at }}</th>
                     <th>
-{{--                        <a href="{{ route('admin.orders.edit', ['id' => $order->id]) }}" class="btn btn-default">Edit</a>--}}
+                        @foreach( $order->items as $item)
+                            <li>{{$item->product->name}}</li>
+                        @endforeach
+                    </th>
+                    <th>
+                        @if($order->deliveryman)
+                            {{$order->deliveryman->name}}
+                        @else
+                            --
+                        @endif
+                    </th>
+                    <th>{{ $order->status }}</th>
+                    <th>
+                        <a href="{{ route('admin.orders.edit', ['id' => $order->id]) }}" class="btn btn-default">Edit</a>
                     </th>
                 </tr>
                 @endforeach

@@ -46,7 +46,24 @@ $factory->define(CodeDelivery\Models\Client::class, function (Faker\Generator $f
 
 $factory->define(CodeDelivery\Models\Order::class, function (Faker\Generator $faker) {
     return [
+        'client_id' => rand(1, 10),
         'total' => $faker->randomFloat(),
-        'status' => $faker->randomKey($array = array('pendente', 'finalizado')),
+        'status' => $faker->randomKey($array = array('0', '1')),
+    ];
+});
+
+$factory->define(CodeDelivery\Models\OrderItem::class, function (Faker\Generator $faker) {
+    return [
+        'product_id' => rand(1, 10),
+        'order_id' => rand(1, 5),
+        'price' => $faker->randomFloat(),
+        'qtd' => $faker->randomDigit(),
+    ];
+});
+
+$factory->define(CodeDelivery\Models\Cupom::class, function (Faker\Generator $faker) {
+    return [
+        'code' => rand(10, 10000),
+        'value' => rand(50, 100)
     ];
 });
