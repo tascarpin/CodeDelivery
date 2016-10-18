@@ -114,7 +114,7 @@ Route::group(['prefix'=>'admin', 'middleware'=>'auth.checkrole', 'as' => 'admin.
 
 Route::group(['prefix'=>'customer', 'as' => 'customer.'], function () {
 
-    Route::get('order/create',
-        ['as' => 'order.create', 'uses' => 'CheckoutController@create']);
+    Route::get('orders/create',
+        ['as' => 'orders.create', 'uses' => 'CheckoutController@create']);
 });
 
