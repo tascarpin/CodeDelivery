@@ -6,7 +6,7 @@
 
         @include('errors._check')
 
-        {!! Form::open(['class' => 'form']) !!}
+        {!! Form::open(['route'=> 'customer.orders.store','class' => 'form']) !!}
 
             <div class="container">
                 <div class="form-group">
@@ -39,37 +39,51 @@
                 </tbody>
             </table>
 
+            <div class="form-group">
+                {!! Form::submit('Criar pedido!', ['class' => 'btn btn-primary']) !!}
+            </div>
+
         {!! Form::close() !!}
 
     </div>
 @endsection
 
 @section('post-script')
-    {{--<script>--}}
-        {{--$('#btnNewItem').click(function () {--}}
-            {{--var row = $('table tbody > tr:last'),--}}
-                    {{--newRow = row.clone(),--}}
-                    {{--length = $("table tbody tr").length;--}}
-            {{--newRow.find('td').each(function () {--}}
-                {{--var td = $(this),--}}
-                        {{--input = td.find('input,select'),--}}
-                        {{--name = input.attr('name');--}}
-                {{--input.attr('name', name.replace((length - 1) + "", length + ""));--}}
-            {{--});--}}
-            {{--newRow.find('input').val(1);--}}
-            {{--newRow.insertAfter(row);--}}
-        {{--});--}}
-    {{--</script>--}}
-
-        <!--jQuery UI Core, Widget and Button components are mandatory-->
-    <link href="jquery-ui-1.11.1.css" rel="stylesheet"/>
-    <link href="jquery.appendGrid-1.6.2.css" rel="stylesheet"/>
-    <script type="text/javascript" src="jquery-1.11.1.js"></script>
-    <script type="text/javascript" src="jquery-ui-1.11.1.js"></script>
-    <script type="text/javascript" src="jquery.appendGrid-1.6.2.js"></script>
-    <script type="text/javascript">
-        $(function () {
-            $('#btnNewItem').appendGrid();
+    <script>
+        $('#btnNewItem').click(function () {
+            var row = $('table tbody > tr:last'),
+                    newRow = row.clone(),
+                    length = $("table tbody tr").length;
+            newRow.find('td').each(function () {
+                var td = $(this),
+                        input = td.find('input,select'),
+                        name = input.attr('name');
+                input.attr('name', name.replace((length - 1) + "", length + ""));
+            });
+            newRow.find('input').val(1);
+            newRow.insertAfter(row);
+            calculateTotal();
         });
+
+        $(document.body).on('click', 'select', function () {
+            calculateTotal();
+        })
+
+        $(document.body).on('blur', 'input', function () {
+            calculateTotal();
+        })
+
+        function calculateTotal(){
+            var total = 0,
+                    trLen = $('table tbody tr').length,
+                    tr = null, price, qtd;
+            for(var i = 0; i < trLen; i++){
+                tr = $('table tbody tr').eq(i);
+                price = tr.find(':selected').data('price');
+                qtd = tr.find('input').val();
+                total += price * qtd;
+            }
+            $('#total').html(total);
+        }
     </script>
 @endsection

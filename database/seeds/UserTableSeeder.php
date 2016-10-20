@@ -20,7 +20,7 @@ class UserTableSeeder extends Seeder
                 'email' => 'tascarpin@yahoo.com.br',
                 'password' => bcrypt('074650'),
             ]
-        );
+        )->client()->save(factory(Client::class)->make());;
 
         factory(User::class)->create(
             [
@@ -29,7 +29,7 @@ class UserTableSeeder extends Seeder
                 'password' => bcrypt('074650'),
                 'role' => 'admin'
             ]
-        );
+        )->client()->save(factory(Client::class)->make());
 
         factory(User::class, 3)->create(
             [
