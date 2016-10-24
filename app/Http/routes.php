@@ -11,11 +11,15 @@
 |
 */
 
+Route::post('oauth/access_token', function() {
+    return Response::json(Authorizer::issueAccessToken());
+});
+
 Route::get('/', function () {
     return view('welcome');
 });
 
-Route::group(['prefix'=>'admin', 'middleware'=>'auth.checkrole', 'as' => 'admin.'], function () {
+Route::group(['prefix'=>'admin', 'middleware'=>'auth.checkrole:admin', 'as' => 'admin.'], function () {
 
     Route::group(['prefix' => 'categories', 'as' => 'categories.'], function (){
 
