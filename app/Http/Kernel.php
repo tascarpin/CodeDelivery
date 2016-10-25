@@ -17,7 +17,8 @@ class Kernel extends HttpKernel
         \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
         \Illuminate\Session\Middleware\StartSession::class,
         \Illuminate\View\Middleware\ShareErrorsFromSession::class,
-        \CodeDelivery\Http\Middleware\VerifyCsrfToken::class,
+//        \CodeDelivery\Http\Middleware\VerifyCsrfToken::class, // Desativado devido o OAuth2
+        \LucaDegasperi\OAuth2Server\Middleware\OAuthExceptionHandlerMiddleware::class,
     ];
 
     /**
@@ -30,5 +31,12 @@ class Kernel extends HttpKernel
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
         'guest' => \CodeDelivery\Http\Middleware\RedirectIfAuthenticated::class,
         'auth.checkrole' => \CodeDelivery\Http\Middleware\CheckRole::class,
+
+        // Route Middleware OAuth2
+        'oauth' => \LucaDegasperi\OAuth2Server\Middleware\OAuthMiddleware::class,
+        'oauth-user' => \LucaDegasperi\OAuth2Server\Middleware\OAuthUserOwnerMiddleware::class,
+        'oauth-client' => \LucaDegasperi\OAuth2Server\Middleware\OAuthClientOwnerMiddleware::class,
+        'check-authorization-params' => \LucaDegasperi\OAuth2Server\Middleware\CheckAuthCodeRequestMiddleware::class,
+        'csrf' => \CodeDelivery\Http\Middleware\VerifyCsrfToken::class,
     ];
 }

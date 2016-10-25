@@ -125,3 +125,13 @@ Route::group(['prefix'=>'customer', 'middleware'=>'auth.checkrole:client', 'as' 
     });
 });
 
+Route::group(['prefix'=>'api', 'middleware'=>'oauth', 'as' => 'api.'], function () {
+
+    Route::get('pedidos', function(){
+        return [
+            'id' => 1,
+            'client' => 'Luiz Carlos',
+            'total' => 10,
+        ];
+    });
+});

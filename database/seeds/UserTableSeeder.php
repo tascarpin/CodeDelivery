@@ -16,17 +16,17 @@ class UserTableSeeder extends Seeder
 
         factory(User::class)->create(
             [
-                'name' => 'tascarpin',
-                'email' => 'tascarpin@yahoo.com.br',
-                'password' => bcrypt('074650'),
+                'name' => 'client',
+                'email' => 'client@client.com.br',
+                'password' => bcrypt('123456'),
             ]
         )->client()->save(factory(Client::class)->make());;
 
         factory(User::class)->create(
             [
                 'name' => 'admin',
-                'email' => 'admin@yahoo.com.br',
-                'password' => bcrypt('074650'),
+                'email' => 'admin@admin.com.br',
+                'password' => bcrypt('123456'),
                 'role' => 'admin'
             ]
         )->client()->save(factory(Client::class)->make());
