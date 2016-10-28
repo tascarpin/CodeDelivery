@@ -127,12 +127,23 @@ Route::group(['prefix'=>'customer', 'middleware'=>'auth.checkrole:client', 'as' 
 
 Route::group(['prefix'=>'api', 'middleware'=>'oauth', 'as' => 'api.'], function () {
 
-    Route::get('teste', function(){
-        return [
-            'id' => 1,
-            'client' => 'Luiz Carlos',
-            'total' => 10,
-        ];
+    Route::group(['prefix'=>'client', 'as' => 'client.'], function () {
+        Route::get('pedidos', function(){
+            return [
+                'id' => 1,
+                'client' => 'Luiz Carlos - client',
+                'total' => 10,
+            ];
+        });
     });
 
+    Route::group(['prefix'=>'deliveryman', 'as' => 'deliveryman.'], function () {
+        Route::get('pedidos', function(){
+            return [
+                'id' => 1,
+                'client' => 'Luiz Carlos - entregador',
+                'total' => 10,
+            ];
+        });
+    });
 });
