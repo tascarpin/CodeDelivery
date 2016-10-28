@@ -12,8 +12,8 @@ class CategoriesController extends Controller
      */
     private $categoryRepository;
 
-    public function __construct(CategoryRepository $categoryRepository){
-
+    public function __construct(CategoryRepository $categoryRepository)
+    {
         $this->categoryRepository = $categoryRepository;
     }
 

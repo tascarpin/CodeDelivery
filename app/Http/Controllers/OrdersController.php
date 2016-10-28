@@ -21,7 +21,6 @@ class OrdersController extends Controller
 
     public function __construct(OrderRepository $orderRepository, OrderService $orderService)
     {
-
         $this->orderRepository = $orderRepository;
         $this->orderService = $orderService;
     }
