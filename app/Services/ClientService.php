@@ -8,28 +8,9 @@
 
 namespace CodeDelivery\Services;
 
-
-use CodeDelivery\Repositories\ClientRepository;
-use CodeDelivery\Repositories\UserRepository;
-
-class ClientService
+trait ClientService
 {
-    /**
-     * @var ClientRepository
-     */
-    private $clientRepository;
-    /**
-     * @var UserRepository
-     */
-    private $userRepository;
-
-    public function __construct(ClientRepository $clientRepository, UserRepository $userRepository)
-    {
-        $this->clientRepository = $clientRepository;
-        $this->userRepository = $userRepository;
-    }
-
-    public function update(array $data, $id)
+    public function updateClientService(array $data, $id)
     {
         $this->clientRepository->update($data, $id);
 
@@ -38,7 +19,7 @@ class ClientService
         $this->userRepository->update($data['user'], $userId);
     }
 
-    public function create(array $data)
+    public function storeClientService(array $data)
     {
         $data['user']['password'] = bcrypt('123456');
 

@@ -4,22 +4,28 @@ namespace CodeDelivery\Http\Controllers;
 
 use CodeDelivery\Http\Requests\AdminClientRequest;
 use CodeDelivery\Repositories\ClientRepository;
+use CodeDelivery\Repositories\UserRepository;
 use CodeDelivery\Services\ClientService;
+use LucaDegasperi\OAuth2Server\Facades\Authorizer;
 
 class ClientsController extends Controller
 {
+    use ClientService;
+
     /**
-     * @var ClientService
+     * @var UserRepository
      */
-    private $clientService;
+    private $userRepository;
     /**
      * @var ClientRepository
      */
     private $clientRepository;
 
-    public function __construct(ClientRepository $clientRepository, ClientService $clientService)
+
+    public function __construct(ClientRepository $clientRepository, UserRepository $userRepository)
     {
-        $this->clientService = $clientService;
+
+        $this->userRepository = $userRepository;
         $this->clientRepository = $clientRepository;
     }
 
@@ -34,7 +40,7 @@ class ClientsController extends Controller
 
     public function store(AdminClientRequest $adminClientRequest){
         $data = $adminClientRequest->all();
-        $this->clientService->create($data);
+        $this->storeClientService($data);
         return redirect()->route('admin.clients.index');
     }
 
@@ -45,7 +51,11 @@ class ClientsController extends Controller
 
     public function update(AdminClientRequest $adminClientRequest, $id){
         $data = $adminClientRequest->all();
-        $this->clientService->update($data, $id);
+        $this->updateClientService($data, $id);
         return redirect()->route('admin.clients.index');
+    }
+
+    public function authenticated(){
+        return $this->userRepository->with('client')->find(Authorizer::getResourceOwnerID());
     }
 }

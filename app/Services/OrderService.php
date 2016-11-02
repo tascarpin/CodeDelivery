@@ -8,47 +8,17 @@
 
 namespace CodeDelivery\Services;
 
-
-use CodeDelivery\Repositories\CupomRepository;
-use CodeDelivery\Repositories\OrderRepository;
-use CodeDelivery\Repositories\ProductRepository;
 use Illuminate\Support\Facades\DB;
 
-class OrderService
+trait OrderService
 {
-
-
-    /**
-     * @var OrderRepository
-     */
-    private $orderRepository;
-    /**
-     * @var CupomRepository
-     */
-    private $cupomRepository;
-    /**
-     * @var ProductRepository
-     */
-    private $productRepository;
-
-    public function __construct(
-        OrderRepository $orderRepository,
-        CupomRepository $cupomRepository,
-        ProductRepository $productRepository)
-    {
-
-        $this->orderRepository = $orderRepository;
-        $this->cupomRepository = $cupomRepository;
-        $this->productRepository = $productRepository;
-    }
-
     public function list_status()
     {
         $list_status = ['0' => 'Pendente', '1' => 'A caminho', '2' => 'Entregue'];
         return $list_status;
     }
 
-    public function create(array $data)
+    public function createOrderService(array $data)
     {
         DB::beginTransaction();
         try{
@@ -79,6 +49,8 @@ class OrderService
             }
             $order->save();
             DB::commit();
+            return $order;
+
         }catch (\Exception $e){
             DB::rollback();
             throw $e;

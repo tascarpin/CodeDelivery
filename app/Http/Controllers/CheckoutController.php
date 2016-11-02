@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Auth;
 
 class CheckoutController extends Controller
 {
+    use OrderService;
+
     /**
      * @var OrderRepository
      */
@@ -23,22 +25,16 @@ class CheckoutController extends Controller
      * @var ProductRepository
      */
     private $productRepository;
-    /**
-     * @var OrderService
-     */
-    private $orderService;
 
     public function __construct(
         OrderRepository $orderRepository,
         UserRepository $userRepository,
-        ProductRepository $productRepository,
-        OrderService $orderService
+        ProductRepository $productRepository
     )
     {
         $this->orderRepository = $orderRepository;
         $this->userRepository = $userRepository;
         $this->productRepository = $productRepository;
-        $this->orderService = $orderService;
     }
 
     public function index()
@@ -62,7 +58,7 @@ class CheckoutController extends Controller
         $data = $request->all();
         $client_id = $this->userRepository->find(Auth::user()->id)->client->id;
         $data['client_id'] = $client_id;
-        $this->orderService->create($data);
+        $this->createOrderService($data);
 
         return redirect()->route('customer.orders.index');
     }

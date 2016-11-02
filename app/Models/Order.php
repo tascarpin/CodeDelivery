@@ -17,11 +17,18 @@ class Order extends Model implements Transformable
         'status',
     ];
 
-    public function items(){
+    public function cupom()
+    {
+        return $this->belongsTo(Cupom::class);
+    }
+
+    public function items()
+    {
         return $this->hasMany(OrderItem::class);
     }
 
-    public function deliveryman(){
+    public function deliveryman()
+    {
         return $this->belongsTo(User::class, 'user_deliveryman_id', 'id');
     }
 

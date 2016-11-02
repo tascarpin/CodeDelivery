@@ -127,23 +127,40 @@ Route::group(['prefix'=>'customer', 'middleware'=>'auth.checkrole:client', 'as' 
 
 Route::group(['prefix'=>'api', 'middleware'=>'oauth', 'as' => 'api.'], function () {
 
-    Route::group(['prefix'=>'client', 'as' => 'client.'], function () {
-        Route::get('pedidos', function(){
+    Route::get('authenticated', ['as' => 'authenticated', 'uses' => 'ClientsController@authenticated']);
+
+    Route::group(['prefix'=>'client', 'middleware'=>'oauth.checkrole:client', 'as' => 'client.'], function () {
+
+        Route::resource('order', 'Api\Clients\ClientsCheckoutController',
+            [
+                'except' => ['create', 'edit', 'destroy'],
+                'names' =>
+                    [
+                    'index' => 'order.index',
+                    'show' => 'order.show',
+                    'update' => 'order.update',
+                    'store' => 'order.store',
+                    ],
+            ]
+        );
+
+        Route::get('pedidos', ['as' => 'pedidos', function(){
             return [
                 'id' => 1,
                 'client' => 'Luiz Carlos - client',
                 'total' => 10,
             ];
-        });
+        }]);
+
     });
 
-    Route::group(['prefix'=>'deliveryman', 'as' => 'deliveryman.'], function () {
-        Route::get('pedidos', function(){
+    Route::group(['prefix'=>'deliveryman', 'middleware'=>'oauth.checkrole:deliveryman', 'as' => 'deliveryman.'], function () {
+        Route::get('pedidos', ['as' => 'pedidos', function(){
             return [
                 'id' => 1,
                 'client' => 'Luiz Carlos - entregador',
                 'total' => 10,
             ];
-        });
+        }]);
     });
 });

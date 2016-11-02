@@ -31,11 +31,14 @@ class UserTableSeeder extends Seeder
             ]
         )->client()->save(factory(Client::class)->make());
 
-        factory(User::class, 3)->create(
+        factory(User::class)->create(
             [
+                'name' => 'deliveryman',
+                'email' => 'deliveryman@deliveryman.com.br',
+                'password' => bcrypt('123456'),
                 'role' => 'deliveryman'
             ]
-        );
+        )->client()->save(factory(Client::class)->make());
 
         factory(User::class, 10)->create()->each(function($u) {
             $u->client()->save(factory(Client::class)->make());
