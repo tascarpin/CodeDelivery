@@ -47,7 +47,7 @@ class OrdersController extends Controller
     public function edit($id, UserRepository $userRepository)
     {
         $order = $this->orderRepository->find($id);
-        $list_status = $this->list_status();
+        $list_status = $this->list_statusService();
         $deliveryman = $userRepository->findWhere(['role' => 'deliveryman'])->lists('name','id');
         return view('admin.orders.edit', compact('order', 'list_status', 'deliveryman'));
     }

@@ -8,11 +8,12 @@
 
 namespace CodeDelivery\Services;
 
+use CodeDelivery\Models\Order;
 use Illuminate\Support\Facades\DB;
 
 trait OrderService
 {
-    public function list_status()
+    public function list_statusService()
     {
         $list_status = ['0' => 'Pendente', '1' => 'A caminho', '2' => 'Entregue'];
         return $list_status;
@@ -56,5 +57,33 @@ trait OrderService
             throw $e;
         }
 
+    }
+
+    public function getByIdAndDeliverymanService($id, $idDeliveryman)
+    {
+        $result = $this->orderRepository->with(['client', 'items', 'cupom'])->findWhere([
+            'id' => $id,
+            'user_deliveryman_id' => $idDeliveryman
+        ]);
+
+        $result = $result->first();
+        if($result) {
+            $result->items->each(function ($item) {
+                $item->product;
+            });
+        }
+
+        return $result;
+    }
+
+    public function updateStatusService($id, $idDeliveryman, $status)
+    {
+        $order = $this->getByIdAndDeliverymanService($id, $idDeliveryman);
+        if ($order instanceof Order){
+            $order->status = $status;
+            $order->save();
+            return $order;
+        }
+        return false;
     }
 }
