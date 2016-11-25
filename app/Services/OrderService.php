@@ -9,10 +9,24 @@
 namespace CodeDelivery\Services;
 
 use CodeDelivery\Models\Order;
+use CodeDelivery\Repositories\CupomRepository;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\DB;
 
 trait OrderService
 {
+
+    /**
+     * @var CupomRepository
+     */
+    private $cupomRepository;
+
+    public function __construct(CupomRepository $cupomRepository){
+
+        $this->cupomRepository = $cupomRepository;
+    }
+
     public function list_statusService()
     {
         $list_status = ['0' => 'Pendente', '1' => 'A caminho', '2' => 'Entregue'];
@@ -24,6 +38,9 @@ trait OrderService
         DB::beginTransaction();
         try{
             $data['status'] = 0;
+            if(isset($data['cupom_id'])){
+                unset($data['cupom_id']);
+            }
             if(isset($data['cupom_code'])){
                 $cupom = $this->cupomRepository->findByField('code',$data['cupom_code'])->first();
                 $data['cupom_id'] = $cupom->id;
@@ -61,16 +78,23 @@ trait OrderService
 
     public function getByIdAndDeliverymanService($id, $idDeliveryman)
     {
-        $result = $this->orderRepository->with(['client', 'items', 'cupom'])->findWhere([
+        $result = $this->orderRepository
+            ->skipPresenter(false)
+            ->with(['client', 'items', 'cupom'])->findWhere([
             'id' => $id,
             'user_deliveryman_id' => $idDeliveryman
         ]);
 
-        $result = $result->first();
-        if($result) {
-            $result->items->each(function ($item) {
-                $item->product;
-            });
+        if($result instanceof Collection) {
+            $result = $result->first();
+        }else {
+            if (isset($result['data']) && count($result['data']) == 1) {
+                $result = [
+                    'data' => $result['data'][0]
+                ];
+            } else {
+                throw new ModelNotFoundException('Order não existe.');
+            }
         }
 
         return $result;

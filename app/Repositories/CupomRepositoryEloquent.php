@@ -2,11 +2,10 @@
 
 namespace CodeDelivery\Repositories;
 
-use Prettus\Repository\Eloquent\BaseRepository;
-use Prettus\Repository\Criteria\RequestCriteria;
-use CodeDelivery\Repositories\CupomRepository;
 use CodeDelivery\Models\Cupom;
 use CodeDelivery\Validators\CupomValidator;
+use Prettus\Repository\Criteria\RequestCriteria;
+use Prettus\Repository\Eloquent\BaseRepository;
 
 /**
  * Class CupomRepositoryEloquent

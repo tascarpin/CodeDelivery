@@ -3,11 +3,11 @@
 namespace CodeDelivery\Http\Controllers\Api\Clients;
 
 use CodeDelivery\Http\Controllers\Controller;
+use CodeDelivery\Http\Requests\CheckoutRequest;
 use CodeDelivery\Repositories\OrderRepository;
 use CodeDelivery\Repositories\ProductRepository;
 use CodeDelivery\Repositories\UserRepository;
 use CodeDelivery\Services\OrderService;
-use Illuminate\Http\Request;
 use LucaDegasperi\OAuth2Server\Facades\Authorizer;
 
 class ClientsCheckoutController extends Controller
@@ -27,6 +27,8 @@ class ClientsCheckoutController extends Controller
      */
     private $productRepository;
 
+    private $with = ['client', 'cupom', 'items', 'deliveryman'];
+
     public function __construct(
         OrderRepository $orderRepository,
         UserRepository $userRepository,
@@ -42,7 +44,10 @@ class ClientsCheckoutController extends Controller
     {
         $id = Authorizer::getResourceOwnerId();
         $client_id = $this->userRepository->find($id)->client->id;
-        $orders = $this->orderRepository->with('items')->scopeQuery(function($query) use($client_id){
+        $orders = $this->orderRepository
+            ->skipPresenter(false)
+            ->with($this->with)
+            ->scopeQuery(function($query) use($client_id){
             return $query->where('client_id', '=', $client_id);
         })->paginate();
 
@@ -56,7 +61,7 @@ class ClientsCheckoutController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CheckoutRequest $request)
     {
         $data = $request->all();
         $id = Authorizer::getResourceOwnerId();
@@ -64,7 +69,10 @@ class ClientsCheckoutController extends Controller
         $data['client_id'] = $client_id;
         $object = $this->createOrderService($data);
 
-        return $this->orderRepository->with('items')->find($object->id);
+        return $this->orderRepository
+            ->skipPresenter(false)
+            ->with($this->with)
+            ->find($object->id);
     }
 
     /**
@@ -75,10 +83,9 @@ class ClientsCheckoutController extends Controller
      */
     public function show($id)
     {
-        $object = $this->orderRepository->with(['client', 'items', 'cupom'])->find($id);
-        $object->items->each(function($item){
-            $item->product;
-        });
-        return $object;
+        return $this->orderRepository
+            ->skipPresenter(false)
+            ->with($this->with)
+            ->find($id);
     }
 }
