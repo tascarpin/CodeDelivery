@@ -27,7 +27,7 @@ class ClientsCheckoutController extends Controller
      */
     private $productRepository;
 
-    private $with = ['client', 'cupom', 'items', 'deliveryman'];
+    private $with = ['client', 'cupom', 'items'];
 
     public function __construct(
         OrderRepository $orderRepository,
